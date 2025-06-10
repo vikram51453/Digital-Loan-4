@@ -1,4 +1,8 @@
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const LoanSummary = dynamic(() => import("@/components/LoanSummary"), { ssr: false });
+const EmiTracker = dynamic(() => import("@/components/EmiTracker"), { ssr: false });
 
 export default function Home() {
   return (
@@ -13,18 +17,12 @@ export default function Home() {
             <li><a href="#about" className="hover:text-blue-600">About</a></li>
             <li><a href="#contact" className="hover:text-indigo-600 font-semibold">Contact</a></li>
             <li>
-              <a
-                href="/apply"
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-              >
+              <a href="/apply" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
                 Apply Now
               </a>
             </li>
             <li>
-              <a
-                href="/login"
-                className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
-              >
+              <a href="/login" className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">
                 Login
               </a>
             </li>
@@ -47,6 +45,14 @@ export default function Home() {
             <p className="mb-4 text-lg">Your trusted partner in seamless digital loan and EMI tracking.</p>
             <a href="/login" className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded text-white font-semibold">Get Started</a>
           </div>
+        </div>
+      </section>
+
+      {/* Dashboard Section */}
+      <section className="py-16 px-4 bg-gray-100">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <LoanSummary />
+          <EmiTracker />
         </div>
       </section>
 
@@ -106,4 +112,3 @@ export default function Home() {
     </div>
   );
 }
- 
