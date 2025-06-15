@@ -22,6 +22,11 @@ export default function Home() {
               </a>
             </li>
             <li>
+              <a href="flexi-ai" className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                Ask AI
+              </a>
+            </li>
+            <li>
               <a href="/login" className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">
                 Login
               </a>
