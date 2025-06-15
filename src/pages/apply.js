@@ -1,96 +1,150 @@
-// File: pages/apply.js
-
 import { useState } from "react";
-import Head from "next/head";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Apply() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     amount: "",
-    reason: "",
+    type: "",
   });
+  const [submittedId, setSubmittedId] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Application submitted!");
-    // Here you can integrate your backend API or Firebase, etc.
+
+    const res = await fetch("/api/submitLoan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      setSubmittedId(data.id);
+      alert("✅ Loan Submitted! Your Application ID is: " + data.id);
+      setForm({ name: "", email: "", phone: "", amount: "", type: "" });
+    } else {
+      alert("❌ Error: " + data.error);
+    }
   };
 
   return (
-    <>
-      <Head>
-        <title>Apply for Loan | Flexi Loaner</title>
-      </Head>
-      <div className="min-h-screen bg-gray-50 py-12 px-6 sm:px-12">
-        <div className="max-w-2xl mx-auto bg-white shadow-md rounded p-8">
-          <h2 className="text-3xl font-bold mb-6 text-center text-blue-700">Loan Application Form</h2>
-          <form onSubmit={handleSubmit} className="space-y-5">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded shadow">
+        <h2 className="text-center text-3xl font-bold text-blue-700">Apply for a Loan</h2>
+
+        <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          {/* Name */}
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
             <input
               type="text"
               name="name"
-              placeholder="Full Name"
+              id="name"
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full p-3 border border-gray-300 rounded"
+              placeholder="John Doe"
+              className="mt-1 w-full border p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
+          </div>
+
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
             <input
               type="email"
               name="email"
-              placeholder="Email"
+              id="email"
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full p-3 border border-gray-300 rounded"
+              placeholder="you@example.com"
+              className="mt-1 w-full border p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
             <input
               type="tel"
               name="phone"
-              placeholder="Phone Number"
+              id="phone"
               value={form.phone}
               onChange={handleChange}
+              pattern="[0-9]{10}"
               required
-              className="w-full p-3 border border-gray-300 rounded"
+              placeholder="10-digit mobile number"
+              className="mt-1 w-full border p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
+          </div>
+
+          {/* Amount */}
+          <div>
+            <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Loan Amount (₹)</label>
             <input
               type="number"
               name="amount"
-              placeholder="Loan Amount"
+              id="amount"
               value={form.amount}
               onChange={handleChange}
               required
-              className="w-full p-3 border border-gray-300 rounded"
+              min={1000}
+              placeholder="Enter loan amount"
+              className="mt-1 w-full border p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
-            <textarea
-              name="reason"
-              rows="4"
-              placeholder="Reason for Loan"
-              value={form.reason}
+          </div>
+
+          {/* Loan Type */}
+          <div>
+            <label htmlFor="type" className="block text-sm font-medium text-gray-700">Loan Type</label>
+            <select
+              name="type"
+              id="type"
+              value={form.type}
               onChange={handleChange}
               required
-              className="w-full p-3 border border-gray-300 rounded"
-            />
-            <button
-              type="submit"
-              className="bg-blue-600 text-white w-full py-3 rounded hover:bg-blue-700"
+              className="mt-1 w-full border p-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
             >
-              Submit Application
-            </button>
-          </form>
-          <div className="mt-6 text-center">
-            <Link href="/" className="text-blue-500 hover:underline">
-              ← Back to Home
-            </Link>
+              <option value="">-- Select Loan Type --</option>
+              <option value="Home Loan">Home Loan</option>
+              <option value="Personal Loan">Personal Loan</option>
+              <option value="Education Loan">Education Loan</option>
+              <option value="Vehicle Loan">Vehicle Loan</option>
+              <option value="Business Loan">Business Loan</option>
+            </select>
           </div>
-        </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow"
+          >
+            Submit Application
+          </button>
+        </form>
+
+        {submittedId && (
+          <div className="mt-6 text-center bg-green-100 text-green-800 p-3 rounded shadow space-y-2">
+            <p>✅ Application submitted successfully!</p>
+            <p><strong>Your ID:</strong> {submittedId}</p>
+            <button
+              onClick={() => router.push("/")}
+              className="mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded shadow"
+            >
+              ⬅ Back to Home
+            </button>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }

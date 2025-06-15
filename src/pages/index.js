@@ -11,7 +11,7 @@ export default function Home() {
       <nav className="bg-white shadow-md">
         <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
           <div className="text-xl font-bold text-blue-700">Flexi Loaner</div>
-          <ul className="flex gap-6 text-sm font-medium text-gray-700 items-center">
+          <ul className="flex gap-4 sm:gap-6 text-sm font-medium text-gray-700 items-center flex-wrap">
             <li><a href="#home" className="hover:text-blue-600">Home</a></li>
             <li><a href="#features" className="hover:text-blue-600">Features</a></li>
             <li><a href="#about" className="hover:text-blue-600">About</a></li>
@@ -22,12 +22,17 @@ export default function Home() {
               </a>
             </li>
             <li>
-              <a href="flexi-ai" className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+              <a href="/flexi-ai" className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
                 Ask AI
               </a>
             </li>
             <li>
-              <a href="/login" className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">
+              <a href="/check" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                Check Application
+              </a>
+            </li>
+            <li>
+              <a href="/login" className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition">
                 Login
               </a>
             </li>
